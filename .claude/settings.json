@@ -9,7 +9,24 @@
       "Bash(cp -r /Users/praneethbudati/Desktop/portfolio-build/. /Users/praneethbudati/Desktop/portfolio/)",
       "Bash(rm -rf /Users/praneethbudati/Desktop/portfolio-build)",
       "Bash(npm install:*)",
-      "Bash(npx shadcn@latest init --yes --defaults)"
+      "Bash(npx shadcn@latest init --yes --defaults)",
+      "Bash(npx shadcn@latest add card input textarea label tabs --yes)",
+      "Bash(npm run:*)",
+      "Bash(ls /Users/praneethbudati/Desktop/portfolio/node_modules/next/dist/server/require-hook*)",
+      "Bash(node /Users/praneethbudati/Desktop/portfolio/node_modules/next/dist/bin/next build)",
+      "Bash(node node_modules/next/dist/bin/next build)",
+      "Bash(grep -r ^export.*Github /Users/praneethbudati/Desktop/portfolio/node_modules/lucide-react/dist/esm/icons/)",
+      "Bash(node -e \"const l = require\\(''''lucide-react''''\\); console.log\\(Object.keys\\(l\\).filter\\(k => k.toLowerCase\\(\\).includes\\(''''git''''\\)\\)\\)\")",
+      "Bash(node -e \"const l = require\\(''lucide-react''\\); console.log\\(Object.keys\\(l\\).filter\\(k => k.toLowerCase\\(\\).includes\\(''link''\\)\\)\\)\")",
+      "Bash(/Users/praneethbudati/Desktop/portfolio/components/ui/input.tsx:*)",
+      "Bash(/Users/praneethbudati/Desktop/portfolio/components/ui/textarea.tsx:*)",
+      "Bash(/Users/praneethbudati/Desktop/portfolio/components/ui/label.tsx:*)",
+      "Bash(/Users/praneethbudati/Desktop/portfolio/components/ui/tabs.tsx:*)",
+      "Bash(perl -i -pe 's/ease: \\\\[0\\\\.22, 1, 0\\\\.36, 1\\\\]/ease: \"\"easeOut\"\"/g' components/sections/About.tsx components/sections/Hero.tsx components/sections/Experience.tsx components/sections/Projects.tsx components/sections/Achievements.tsx components/sections/Skills.tsx)",
+      "Bash(perl -i -pe 's/export interface InputProps extends React\\\\.InputHTMLAttributes<HTMLInputElement> \\\\{\\\\}/export type InputProps = React.InputHTMLAttributes<HTMLInputElement>/' components/ui/input.tsx)",
+      "Bash(perl -i -pe 's/export interface TextareaProps extends React\\\\.TextareaHTMLAttributes<HTMLTextAreaElement> \\\\{\\\\}/export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>/' components/ui/textarea.tsx)",
+      "Bash(perl -i -pe 's/export interface LabelProps extends React\\\\.LabelHTMLAttributes<HTMLLabelElement> \\\\{\\\\}/export type LabelProps = React.LabelHTMLAttributes<HTMLLabelElement>/' components/ui/label.tsx)",
+      "Bash(ln -sf ../next/dist/bin/next node_modules/.bin/next)"
     ]
   }
 }
