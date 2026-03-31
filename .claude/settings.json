@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/praneethbudati/Desktop/**)",
+      "Bash(npm --version)",
+      "Bash(npm info:*)",
+      "Bash(npx create-next-app@14 . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --use-npm --yes)",
+      "Bash(npx create-next-app@14 portfolio-build --typescript --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --use-npm --yes)",
+      "Bash(cp -r /Users/praneethbudati/Desktop/portfolio-build/. /Users/praneethbudati/Desktop/portfolio/)",
+      "Bash(rm -rf /Users/praneethbudati/Desktop/portfolio-build)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init --yes --defaults)"
+    ]
+  }
+}
