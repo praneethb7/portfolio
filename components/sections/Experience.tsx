@@ -171,9 +171,44 @@ export default function Experience() {
               background: 'linear-gradient(to bottom, var(--accent), rgba(91,127,255,0.15))',
             }}
           />
-          {EXPERIENCE.map((entry, index) => (
+          {/* Full timeline cards — TA + AceNSET */}
+          {EXPERIENCE.slice(0, 2).map((entry, index) => (
             <TimelineEntry key={index} entry={entry} index={index} />
           ))}
+
+          {/* Compact one-liner tabs — Club President + Placement Cell */}
+          <div className="flex flex-col gap-3 mt-4 mb-14 md:pl-[calc(50%+2rem)]">
+            {EXPERIENCE.slice(2).map((entry, i) => (
+              <motion.div
+                key={entry.role}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg"
+                style={{
+                  background: 'rgba(91,127,255,0.06)',
+                  border: '1px solid rgba(91,127,255,0.15)',
+                }}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.4, delay: i * 0.08 }}
+              >
+                <span
+                  className="w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{ background: 'var(--accent)', opacity: 0.6 }}
+                />
+                <div className="min-w-0 flex items-baseline gap-2 flex-wrap">
+                  <span className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                    {entry.role}
+                  </span>
+                  <span className="text-sm font-medium" style={{ color: 'var(--accent)' }}>
+                    {entry.org}
+                  </span>
+                  <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+                    · {entry.date}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
     </section>

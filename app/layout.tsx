@@ -6,6 +6,9 @@ import Navbar from "@/components/common/Navbar"
 import CustomCursor from "@/components/common/CustomCursor"
 import CommandPalette from "@/components/common/CommandPalette"
 import InteractiveBackground from "@/components/common/InteractiveBackground"
+import dynamic from "next/dynamic"
+
+const SearchHint = dynamic(() => import("@/components/common/SearchHint"), { ssr: false })
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -71,6 +74,7 @@ export default function RootLayout({
           <CustomCursor />
           <Navbar />
           <CommandPalette />
+          <SearchHint />
           <main style={{ position: 'relative', zIndex: 1 }}>{children}</main>
         </Providers>
       </body>

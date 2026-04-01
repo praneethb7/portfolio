@@ -77,18 +77,24 @@ export default function Contact() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSending(true)
-    const subject = encodeURIComponent(`Portfolio contact from ${form.name}`)
-    const body = encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\n\n${form.message}`)
-    window.location.href = `mailto:praneethbudati.work@gmail.com?subject=${subject}&body=${body}`
-    setToast({ show: true, message: 'Opening your mail client...', isSuccess: true })
-    setTimeout(() => setToast({ show: false, message: '' }), 5000)
-    setTimeout(() => {
-      setSending(false)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      if (!res.ok) throw new Error('Failed')
+      setToast({ show: true, message: 'Message sent! I\'ll get back to you soon.', isSuccess: true })
       setForm({ name: '', email: '', message: '' })
-    }, 1500)
+    } catch {
+      setToast({ show: true, message: 'Something went wrong. Try emailing directly.', isSuccess: false })
+    } finally {
+      setSending(false)
+      setTimeout(() => setToast({ show: false, message: '' }), 5000)
+    }
   }
 
   const socials = [

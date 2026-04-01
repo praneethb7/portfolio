@@ -101,7 +101,7 @@ function GoogleBigCodeCard({ item, index }: { item: Achievement; index: number }
         <CountUp end={item.value} duration={2.5} />
       </div>
       <div className="text-xs font-mono mb-3" style={{ color: 'rgba(255,255,255,0.45)' }}>
-        Top Nationally
+        NATIONAL RANK
       </div>
 
       <div className="text-[10px] font-mono mt-auto" style={{ color: 'rgba(66,133,244,0.6)' }}>

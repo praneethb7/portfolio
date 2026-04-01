@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ExternalLink, Star, Zap, ChevronRight } from 'lucide-react'
+import { ExternalLink, Star, Zap } from 'lucide-react'
 import { GithubIcon } from '@/components/common/Icons'
 import { PROJECTS, type Project } from '@/lib/data'
 
@@ -37,14 +37,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
   return (
     <motion.div
-      className="relative shrink-0"
-      style={{
-        minWidth: '360px',
-        width: '360px',
-        scrollSnapAlign: 'start',
-        willChange: 'transform',
-      }}
-      initial={{ opacity: 0, scale: 0.9 }}
+      className="relative w-full"
+      style={{ willChange: 'transform' }}
+      initial={{ opacity: 0, scale: 0.96 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true, amount: 0.1 }}
       transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
@@ -71,7 +66,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             transition: 'transform 0.1s ease-out',
             border: hovered ? 'none' : '1px solid rgba(255,255,255,0.07)',
             background: '#0f0f12',
-            minHeight: '400px',
           }}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
@@ -89,11 +83,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           />
 
           <div
-            className="relative z-10 rounded-[14px] overflow-hidden h-full"
+            className="relative z-10 rounded-[14px] overflow-hidden"
             style={{ background: '#0f0f12', margin: hovered ? '1px' : '0' }}
           >
-            <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50`} />
-            <div className="absolute inset-0 bg-black/50" />
+            <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-20`} />
+            <div className="absolute inset-0 bg-black/80" />
             <div
               className="absolute inset-0 opacity-[0.07]"
               style={{
@@ -103,7 +97,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               }}
             />
 
-            <div className="relative z-10 p-6 h-full flex flex-col">
+            <div className="relative z-10 p-6 flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 {project.badge ? (
                   <div
@@ -192,7 +186,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const scale = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0.94, 1, 1, 1.06])
   const opacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 1, 1, 0])
@@ -242,47 +235,26 @@ export default function Projects() {
           </motion.p>
         </div>
 
-        {/* Desktop: horizontal scroll */}
-        <div className="relative z-10">
-          <div
-            ref={scrollRef}
-            className="hidden md:flex gap-5 pb-6 px-6 md:px-12 lg:px-24"
-            style={{
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
-              msOverflowStyle: 'none',
-              scrollbarWidth: 'none',
-            }}
-          >
-            {PROJECTS.map((project, i) => (
-              <ProjectCard key={project.name} project={project} index={i} />
-            ))}
-            {/* Trailing space so last card isn't flush to edge */}
-            <div className="shrink-0 w-6" />
-          </div>
-
-          {/* Scroll hint */}
-          <div className="hidden md:flex items-center gap-1 px-6 md:px-12 lg:px-24 mt-2">
-            <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
-              scroll to see more
-            </span>
-            <ChevronRight className="w-3 h-3" style={{ color: 'var(--text-muted)' }} />
-          </div>
-
-          {/* Mobile: vertical grid */}
-          <div className="md:hidden grid gap-5 px-6">
-            {PROJECTS.map((project, i) => (
+        {/* Vertical stacked, alternating alignment */}
+        <div className="relative z-10 flex flex-col gap-6 px-6 md:px-12 lg:px-24">
+          {PROJECTS.map((project, i) => {
+            const isRight = i % 2 === 1
+            return (
               <motion.div
                 key={project.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                className="flex"
+                style={{ justifyContent: isRight ? 'flex-end' : 'flex-start' }}
+                initial={{ opacity: 0, x: isRight ? 50 : -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.1 }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
+                transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               >
-                <ProjectCard project={project} index={i} />
+                <div style={{ width: '80%' }}>
+                  <ProjectCard project={project} index={i} />
+                </div>
               </motion.div>
-            ))}
-          </div>
+            )
+          })}
         </div>
       </motion.div>
     </section>

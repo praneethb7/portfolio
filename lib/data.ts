@@ -49,20 +49,22 @@ export interface ExperienceEntry {
 
 export const EXPERIENCE: ExperienceEntry[] = [
   {
-    role: "Member, Placement Cell",
-    org: "Scaler School of Technology",
-    date: "Mar 2026 – Present",
-    points: [
-      "Active member of the SST Placement Cell, supporting student placement preparation and industry outreach",
-    ],
-  },
-  {
     role: "Teaching Assistant (TA)",
     org: "Scaler School of Technology",
     date: "Jul 2025 – Present",
     points: [
       "Peer mentor to first-year students; weekly 1:1 sessions and group labs",
       "Facilitated continuous academic support and progress tracking",
+    ],
+  },
+  {
+    role: "Full-Stack Developer & Mentor",
+    org: "AceNSET (EdTech Platform)",
+    date: "Jan 2025 – Sep 2025",
+    points: [
+      "Built full-stack EdTech platform with React (TS), Tailwind, ShadCN UI",
+      "Integrated real-time analytics dashboards and optimized performance",
+      "Led community outreach as SST Ambassador for 300+ aspirants",
     ],
   },
   {
@@ -75,13 +77,11 @@ export const EXPERIENCE: ExperienceEntry[] = [
     ],
   },
   {
-    role: "Full-Stack Developer & Mentor",
-    org: "AceNSET (EdTech Platform)",
-    date: "Jan 2025 – Sep 2025",
+    role: "Member, Placement Cell",
+    org: "Scaler School of Technology",
+    date: "Mar 2026 – Present",
     points: [
-      "Built full-stack EdTech platform with React (TS), Tailwind, ShadCN UI",
-      "Integrated real-time analytics dashboards and optimized performance",
-      "Led community outreach as SST Ambassador for 300+ aspirants",
+      "Active member of the SST Placement Cell, supporting student placement preparation and industry outreach",
     ],
   },
 ]
@@ -116,7 +116,7 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/praneethb7",
     gradient: "from-violet-900 via-purple-800 to-purple-900",
     featured: true,
-    badge: "Built with Claude",
+    badge: "RL Environment",
   },
   {
     name: "Little Kars",
@@ -126,7 +126,7 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/praneethb7",
     gradient: "from-emerald-900 via-green-800 to-green-900",
     featured: true,
-    badge: "Personal Project",
+    badge: "Freelance Project",
   },
   {
     name: "AceNSET",
@@ -135,7 +135,8 @@ export const PROJECTS: Project[] = [
     stack: ["React", "TypeScript", "Tailwind CSS", "ShadCN UI"],
     github: "https://github.com/praneethb7/AceNSET",
     gradient: "from-cyan-900 via-teal-800 to-teal-900",
-    featured: false,
+    featured: true,
+    badge: "Generated revenue"
   },
 ]
 
@@ -241,7 +242,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     label: "Google Big Code",
     value: 1500,
     suffix: "",
-    description: "Top Nationally",
+    description: "",
     accentColor: "#4285F4",
     subtext: "Google's The Big Code · 2026",
   },
