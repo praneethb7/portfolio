@@ -1,36 +1,21 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { GithubIcon, LinkedinIcon, LeetCodeIcon } from './Icons'
 import { NAV_LINKS } from '@/lib/data'
 
 export default function Footer() {
-  const [timeParts, setTimeParts] = useState<{ hhmm: string; colon: string; ss: string; period: string } | null>(null)
+  const [monthYear, setMonthYear] = useState<string | null>(null)
 
   useEffect(() => {
-    const update = () => {
-      const formatted = new Intl.DateTimeFormat('en-IN', {
+    setMonthYear(
+      new Intl.DateTimeFormat('en-IN', {
+        month: 'long',
+        year: 'numeric',
         timeZone: 'Asia/Kolkata',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: true,
       }).format(new Date())
-      const match = formatted.match(/^(\d{2}):(\d{2}):(\d{2})\s*([aApP][mM])$/)
-      if (match) {
-        setTimeParts({
-          hhmm: `${match[1]}`,
-          colon: ':',
-          ss: `${match[2]}`,
-          period: ` ${match[4].toUpperCase()}`,
-        })
-      } else {
-        setTimeParts({ hhmm: formatted, colon: '', ss: '', period: '' })
-      }
-    }
-    update()
-    const id = setInterval(update, 1000)
-    return () => clearInterval(id)
+    )
   }, [])
 
   const handleNavClick = (href: string) => {
@@ -44,12 +29,9 @@ export default function Footer() {
         {/* Left */}
         <p className="text-sm text-center md:text-left" style={{ color: 'var(--text-muted)' }}>
           Praneeth Budati · Built with Next.js &amp; ☕ in Bengaluru
-          {timeParts && (
+          {monthYear && (
             <span className="ml-3 font-mono" style={{ color: 'var(--accent)', opacity: 0.7 }}>
-              {timeParts.hhmm}
-              <span className="cursor-blink-glow">{timeParts.colon}</span>
-              {timeParts.ss}
-              {timeParts.period} IST
+              {monthYear}
             </span>
           )}
         </p>

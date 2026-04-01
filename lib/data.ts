@@ -49,12 +49,29 @@ export interface ExperienceEntry {
 
 export const EXPERIENCE: ExperienceEntry[] = [
   {
+    role: "Member, Placement Cell",
+    org: "Scaler School of Technology",
+    date: "Mar 2026 – Present",
+    points: [
+      "Active member of the SST Placement Cell, supporting student placement preparation and industry outreach",
+    ],
+  },
+  {
     role: "Teaching Assistant (TA)",
     org: "Scaler School of Technology",
     date: "Jul 2025 – Present",
     points: [
       "Peer mentor to first-year students; weekly 1:1 sessions and group labs",
       "Facilitated continuous academic support and progress tracking",
+    ],
+  },
+  {
+    role: "President",
+    org: "Leadership Development Club — SST",
+    date: "Feb 2025 – Nov 2025",
+    points: [
+      "Directly mentored by the Vice President at Scaler School of Technology",
+      "Led club initiatives focused on leadership, communication, and professional growth",
     ],
   },
   {
@@ -234,7 +251,7 @@ export const ACHIEVEMENTS: Achievement[] = [
     value: 300,
     suffix: "+",
     description: "Direct Impact",
-    accentColor: "#4F8EF7",
+    accentColor: "#5B7FFF",
     subtext: "AceNSET Platform + SST Teaching Assistant",
   },
 ]

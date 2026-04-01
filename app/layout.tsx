@@ -1,10 +1,9 @@
 import type { Metadata } from "next"
-import { Bricolage_Grotesque, Inter } from "next/font/google"
+import { Bricolage_Grotesque, Inter, Didact_Gothic } from "next/font/google"
 import "./globals.css"
 import { Providers } from "@/components/common/Providers"
 import Navbar from "@/components/common/Navbar"
 import CustomCursor from "@/components/common/CustomCursor"
-import Loader from "@/components/common/Loader"
 import CommandPalette from "@/components/common/CommandPalette"
 import InteractiveBackground from "@/components/common/InteractiveBackground"
 
@@ -17,6 +16,13 @@ const bricolage = Bricolage_Grotesque({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+})
+
+const didact = Didact_Gothic({
+  subsets: ["latin"],
+  variable: "--font-didact",
+  weight: "400",
   display: "swap",
 })
 
@@ -39,8 +45,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_IN",
     title: "Praneeth Budati | Full Stack Developer",
-    description:
-      "Sophomore at SST building full-stack products and shipping fast.",
+    description: "Sophomore at SST building full-stack products and shipping fast.",
     siteName: "Praneeth Budati Portfolio",
   },
   twitter: {
@@ -48,26 +53,20 @@ export const metadata: Metadata = {
     title: "Praneeth Budati | Full Stack Developer",
     description: "Sophomore at SST building full-stack products and shipping fast.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${bricolage.variable} ${inter.variable}`}
+      className={`${bricolage.variable} ${inter.variable} ${didact.variable}`}
       suppressHydrationWarning
     >
       <body className="antialiased grain" style={{ background: 'var(--surface)', color: 'var(--text-primary)' }}>
         <Providers>
-          <Loader />
           <InteractiveBackground />
           <CustomCursor />
           <Navbar />

@@ -2,10 +2,9 @@
 
 import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ExternalLink, Star, Zap } from 'lucide-react'
+import { ExternalLink, Star, Zap, ChevronRight } from 'lucide-react'
 import { GithubIcon } from '@/components/common/Icons'
 import { PROJECTS, type Project } from '@/lib/data'
-import ScanLine from '@/components/common/ScanLine'
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -36,15 +35,19 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     }
   }
 
-  const isFeatured = project.featured
-
   return (
     <motion.div
-      className={`relative group ${isFeatured ? 'md:col-span-2' : ''}`}
-      initial={{ opacity: 0, scale: 0.85 }}
+      className="relative shrink-0"
+      style={{
+        minWidth: '360px',
+        width: '360px',
+        scrollSnapAlign: 'start',
+        willChange: 'transform',
+      }}
+      initial={{ opacity: 0, scale: 0.9 }}
       whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, delay: index * 0.08, ease: 'easeOut' }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.5, delay: index * 0.08, ease: 'easeOut' }}
     >
       {/* Traveling border wrapper */}
       <div
@@ -56,6 +59,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           backgroundSize: '300% 300%',
           padding: hovered ? '1px' : '0',
           borderRadius: '16px',
+          height: '100%',
           transition: 'padding 0.2s',
         }}
       >
@@ -67,12 +71,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             transition: 'transform 0.1s ease-out',
             border: hovered ? 'none' : '1px solid rgba(255,255,255,0.07)',
             background: '#0f0f12',
+            minHeight: '400px',
           }}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onMouseEnter={handleMouseEnter}
         >
-          {/* Rotating conic border on non-traveling-border hover */}
           <div
             className="absolute inset-[-1px] rounded-[15px] z-0 pointer-events-none"
             style={{
@@ -84,19 +88,22 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             }}
           />
 
-          {/* Inner card */}
-          <div className="relative z-10 rounded-[14px] overflow-hidden h-full" style={{ background: '#0f0f12', margin: hovered ? '1px' : '0' }}>
+          <div
+            className="relative z-10 rounded-[14px] overflow-hidden h-full"
+            style={{ background: '#0f0f12', margin: hovered ? '1px' : '0' }}
+          >
             <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50`} />
-            <div className="absolute inset-0 bg-black/45" />
+            <div className="absolute inset-0 bg-black/50" />
             <div
-              className="absolute inset-0 opacity-[0.08]"
+              className="absolute inset-0 opacity-[0.07]"
               style={{
-                backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
+                backgroundImage:
+                  'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
                 backgroundSize: '40px 40px',
               }}
             />
 
-            <div className={`relative z-10 p-6 ${isFeatured ? 'md:p-8' : ''} h-full flex flex-col`}>
+            <div className="relative z-10 p-6 h-full flex flex-col">
               <div className="flex items-center justify-between mb-4">
                 {project.badge ? (
                   <div
@@ -113,20 +120,23 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 ) : (
                   <div />
                 )}
-                {isFeatured && <Zap className="w-4 h-4 opacity-40" style={{ color: 'var(--accent)' }} />}
+                {project.featured && (
+                  <Zap className="w-4 h-4 opacity-40" style={{ color: 'var(--accent)' }} />
+                )}
               </div>
 
-              <h3 className={`font-heading font-black mb-3 transition-colors duration-300 ${isFeatured ? 'text-2xl md:text-3xl' : 'text-xl'}`}
-                style={{ color: hovered ? 'var(--accent)' : 'var(--text-primary)' }}>
+              <h3
+                className="font-heading font-black text-xl mb-3 transition-colors duration-300"
+                style={{ color: hovered ? 'var(--accent)' : 'var(--text-primary)' }}
+              >
                 {project.name}
               </h3>
 
-              <p className={`leading-relaxed mb-5 flex-1 ${isFeatured ? 'text-base max-w-2xl' : 'text-sm'}`}
-                style={{ color: 'rgba(255,255,255,0.6)' }}>
+              <p className="text-sm leading-relaxed mb-5 flex-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 {project.description}
               </p>
 
-              <div className="flex flex-wrap gap-2 mb-6">
+              <div className="flex flex-wrap gap-2 mb-5">
                 {project.stack.map((tech) => (
                   <span
                     key={tech}
@@ -147,7 +157,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/20"
                   style={{
                     background: 'rgba(255,255,255,0.1)',
                     border: '1px solid rgba(255,255,255,0.1)',
@@ -182,54 +192,97 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
 export default function Projects() {
   const sectionRef = useRef<HTMLElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const scale = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0.94, 1, 1, 1.06])
   const opacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 1, 1, 0])
 
   return (
-    <section ref={sectionRef} id="projects" className="py-28 px-6 md:px-12 lg:px-24 relative overflow-hidden">
-      <ScanLine />
-
+    <section
+      ref={sectionRef}
+      id="projects"
+      className="py-28 relative overflow-hidden"
+      style={{ background: '#0d0a14', position: 'relative', zIndex: 1 }}
+    >
       {/* Section number watermark */}
       <div aria-hidden className="section-number-bg">03</div>
 
       <motion.div style={{ scale, opacity }}>
-        <motion.p
-          className="text-sm uppercase tracking-[0.3em] font-mono mb-4 relative z-10"
-          style={{ color: 'var(--accent)', opacity: 0.6 }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 0.6 }}
-          viewport={{ once: true }}
-        >
-          03 / Projects
-        </motion.p>
+        <div className="px-6 md:px-12 lg:px-24">
+          <motion.p
+            className="text-sm uppercase tracking-[0.3em] font-mono mb-4 relative z-10"
+            style={{ color: 'var(--accent)', opacity: 0.6 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 0.6 }}
+            viewport={{ once: true, amount: 0.1 }}
+          >
+            03 / Projects
+          </motion.p>
 
-        <motion.h2
-          className="font-heading font-black text-4xl md:text-5xl lg:text-6xl mb-4 relative z-10"
-          style={{ color: 'var(--text-primary)' }}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          Things I&apos;ve Built
-        </motion.h2>
+          <motion.h2
+            className="font-heading font-black text-4xl md:text-5xl lg:text-6xl mb-4 relative z-10"
+            style={{ color: 'var(--text-primary)' }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Things I&apos;ve Built
+          </motion.h2>
 
-        <motion.p
-          className="mb-16 text-base max-w-xl relative z-10"
-          style={{ color: 'var(--text-muted)' }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
-        >
-          From AI-powered platforms to mobile apps — projects that ship.
-        </motion.p>
+          <motion.p
+            className="mb-10 text-base max-w-xl relative z-10"
+            style={{ color: 'var(--text-muted)' }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ delay: 0.2 }}
+          >
+            From AI-powered platforms to mobile apps — projects that ship.
+          </motion.p>
+        </div>
 
-        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-5 relative z-10">
-          {PROJECTS.map((project, i) => (
-            <ProjectCard key={project.name} project={project} index={i} />
-          ))}
+        {/* Desktop: horizontal scroll */}
+        <div className="relative z-10">
+          <div
+            ref={scrollRef}
+            className="hidden md:flex gap-5 pb-6 px-6 md:px-12 lg:px-24"
+            style={{
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+            }}
+          >
+            {PROJECTS.map((project, i) => (
+              <ProjectCard key={project.name} project={project} index={i} />
+            ))}
+            {/* Trailing space so last card isn't flush to edge */}
+            <div className="shrink-0 w-6" />
+          </div>
+
+          {/* Scroll hint */}
+          <div className="hidden md:flex items-center gap-1 px-6 md:px-12 lg:px-24 mt-2">
+            <span className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
+              scroll to see more
+            </span>
+            <ChevronRight className="w-3 h-3" style={{ color: 'var(--text-muted)' }} />
+          </div>
+
+          {/* Mobile: vertical grid */}
+          <div className="md:hidden grid gap-5 px-6">
+            {PROJECTS.map((project, i) => (
+              <motion.div
+                key={project.name}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.1 }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <ProjectCard project={project} index={i} />
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
     </section>

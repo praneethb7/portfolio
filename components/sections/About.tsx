@@ -4,7 +4,6 @@ import { useRef } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import { ABOUT_BIO, CURRENTLY, TECH_MARQUEE } from '@/lib/data'
 import Marquee from '@/components/common/Marquee'
-import ScanLine from '@/components/common/ScanLine'
 
 function ClipRevealText({ children, delay = 0, className = '' }: {
   children: React.ReactNode
@@ -29,30 +28,36 @@ function ClipRevealText({ children, delay = 0, className = '' }: {
 
 export default function About() {
   const sectionRef = useRef<HTMLElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
   const scale = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0.94, 1, 1, 1.06])
   const opacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 1, 1, 0])
 
   return (
-    <section ref={sectionRef} id="about" className="py-28 px-6 md:px-12 lg:px-24 relative overflow-hidden">
-      <ScanLine />
-
+    <section
+      ref={sectionRef}
+      id="about"
+      className="py-28 px-6 md:px-12 lg:px-24 relative overflow-hidden"
+      style={{ background: '#0f0d0d', position: 'relative', zIndex: 1 }}
+    >
       {/* Section number watermark */}
       <div aria-hidden className="section-number-bg">01</div>
 
-      <motion.div ref={contentRef} style={{ scale, opacity }}>
+      <motion.div style={{ scale, opacity }}>
         <motion.p
           className="text-sm uppercase tracking-[0.3em] font-mono mb-4 relative z-10"
-          style={{ color: 'var(--accent)' }}
-          initial={{ opacity: 0 }} whileInView={{ opacity: 0.6 }} viewport={{ once: true }}
+          style={{ color: 'var(--accent)', opacity: 0.6 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.6 }}
+          viewport={{ once: true, amount: 0.1 }}
         >
           01 / About
         </motion.p>
 
         <ClipRevealText delay={0.1}>
-          <h2 className="font-heading font-black text-4xl md:text-5xl lg:text-6xl mb-16 relative z-10"
-            style={{ color: 'var(--text-primary)' }}>
+          <h2
+            className="font-heading font-black text-4xl md:text-5xl lg:text-6xl mb-16 relative z-10"
+            style={{ color: 'var(--text-primary)' }}
+          >
             Who I Am
           </h2>
         </ClipRevealText>
@@ -63,7 +68,7 @@ export default function About() {
             className="flex justify-center md:justify-start"
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.9 }}
           >
             <div className="relative">
@@ -97,16 +102,22 @@ export default function About() {
                       className="absolute inset-0 rounded-full blur-3xl opacity-40"
                       style={{ background: 'var(--accent)', width: '120px', height: '120px' }}
                     />
-                    <span className="relative font-heading font-black text-6xl"
-                      style={{ color: 'var(--accent)', textShadow: '0 0 40px rgba(91,127,255,0.6)' }}>
+                    <span
+                      className="relative font-heading font-black text-6xl"
+                      style={{ color: 'var(--accent)', textShadow: '0 0 40px rgba(91,127,255,0.6)' }}
+                    >
                       PB
                     </span>
                   </div>
                 </div>
-                <div className="absolute inset-0 opacity-10" style={{
-                  backgroundImage: 'linear-gradient(rgba(91,127,255,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(91,127,255,0.3) 1px,transparent 1px)',
-                  backgroundSize: '30px 30px',
-                }} />
+                <div
+                  className="absolute inset-0 opacity-10"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(rgba(91,127,255,0.3) 1px,transparent 1px),linear-gradient(90deg,rgba(91,127,255,0.3) 1px,transparent 1px)',
+                    backgroundSize: '30px 30px',
+                  }}
+                />
               </div>
             </div>
           </motion.div>
@@ -116,7 +127,10 @@ export default function About() {
             <div className="space-y-5 mb-8">
               {ABOUT_BIO.map((para, i) => (
                 <ClipRevealText key={i} delay={0.1 + i * 0.15}>
-                  <p className="leading-relaxed text-base md:text-lg" style={{ color: 'var(--text-secondary)' }}>
+                  <p
+                    className="leading-relaxed text-base md:text-lg"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
                     {para}
                   </p>
                 </ClipRevealText>
@@ -126,12 +140,15 @@ export default function About() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-6 rounded-xl p-5"
               style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}
             >
-              <p className="text-xs uppercase tracking-[0.2em] font-mono mb-4" style={{ color: 'var(--accent)', opacity: 0.55 }}>
+              <p
+                className="text-xs uppercase tracking-[0.2em] font-mono mb-4"
+                style={{ color: 'var(--accent)', opacity: 0.55 }}
+              >
                 Currently
               </p>
               <ul className="space-y-3">
@@ -141,7 +158,7 @@ export default function About() {
                     className="flex items-start gap-0"
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={{ once: true, amount: 0.1 }}
                     transition={{ delay: 0.4 + i * 0.08, duration: 0.5 }}
                   >
                     <motion.div
@@ -149,10 +166,12 @@ export default function About() {
                       style={{ transformOrigin: 'top', background: 'var(--accent)', minHeight: '100%' }}
                       initial={{ scaleY: 0 }}
                       whileInView={{ scaleY: 1 }}
-                      viewport={{ once: true }}
+                      viewport={{ once: true, amount: 0.1 }}
                       transition={{ delay: 0.45 + i * 0.08, duration: 0.4 }}
                     />
-                    <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{item.text}</span>
+                    <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                      {item.text}
+                    </span>
                   </motion.li>
                 ))}
               </ul>
@@ -165,10 +184,13 @@ export default function About() {
           className="mt-20 relative z-10"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <p className="text-xs uppercase tracking-[0.3em] font-mono text-center mb-6" style={{ color: 'var(--text-muted)' }}>
+          <p
+            className="text-xs uppercase tracking-[0.3em] font-mono text-center mb-6"
+            style={{ color: 'var(--text-muted)' }}
+          >
             Technologies I work with
           </p>
           <Marquee items={TECH_MARQUEE} speed={25} />
