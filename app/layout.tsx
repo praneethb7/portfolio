@@ -4,6 +4,9 @@ import "./globals.css"
 import { Providers } from "@/components/common/Providers"
 import Navbar from "@/components/common/Navbar"
 import CustomCursor from "@/components/common/CustomCursor"
+import Loader from "@/components/common/Loader"
+import CommandPalette from "@/components/common/CommandPalette"
+import InteractiveBackground from "@/components/common/InteractiveBackground"
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -62,11 +65,14 @@ export default function RootLayout({
       className={`${bricolage.variable} ${inter.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-[#080808] text-white antialiased grain">
+      <body className="antialiased grain" style={{ background: 'var(--surface)', color: 'var(--text-primary)' }}>
         <Providers>
+          <Loader />
+          <InteractiveBackground />
           <CustomCursor />
           <Navbar />
-          <main>{children}</main>
+          <CommandPalette />
+          <main style={{ position: 'relative', zIndex: 1 }}>{children}</main>
         </Providers>
       </body>
     </html>

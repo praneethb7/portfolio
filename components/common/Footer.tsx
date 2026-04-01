@@ -5,19 +5,28 @@ import { GithubIcon, LinkedinIcon, LeetCodeIcon } from './Icons'
 import { NAV_LINKS } from '@/lib/data'
 
 export default function Footer() {
-  const [time, setTime] = useState<string | null>(null)
+  const [timeParts, setTimeParts] = useState<{ hhmm: string; colon: string; ss: string; period: string } | null>(null)
 
   useEffect(() => {
     const update = () => {
-      setTime(
-        new Intl.DateTimeFormat('en-IN', {
-          timeZone: 'Asia/Kolkata',
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hour12: true,
-        }).format(new Date())
-      )
+      const formatted = new Intl.DateTimeFormat('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+      }).format(new Date())
+      const match = formatted.match(/^(\d{2}):(\d{2}):(\d{2})\s*([aApP][mM])$/)
+      if (match) {
+        setTimeParts({
+          hhmm: `${match[1]}`,
+          colon: ':',
+          ss: `${match[2]}`,
+          period: ` ${match[4].toUpperCase()}`,
+        })
+      } else {
+        setTimeParts({ hhmm: formatted, colon: '', ss: '', period: '' })
+      }
     }
     update()
     const id = setInterval(update, 1000)
@@ -30,13 +39,18 @@ export default function Footer() {
   }
 
   return (
-    <footer className="border-t border-white/5 py-10 px-6 md:px-12 lg:px-24">
+    <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }} className="py-10 px-6 md:px-12 lg:px-24">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Left */}
-        <p className="text-sm text-white/40 text-center md:text-left">
+        <p className="text-sm text-center md:text-left" style={{ color: 'var(--text-muted)' }}>
           Praneeth Budati · Built with Next.js &amp; ☕ in Bengaluru
-          {time && (
-            <span className="ml-3 font-mono text-accent/70">{time} IST</span>
+          {timeParts && (
+            <span className="ml-3 font-mono" style={{ color: 'var(--accent)', opacity: 0.7 }}>
+              {timeParts.hhmm}
+              <span className="cursor-blink-glow">{timeParts.colon}</span>
+              {timeParts.ss}
+              {timeParts.period} IST
+            </span>
           )}
         </p>
 
@@ -46,7 +60,8 @@ export default function Footer() {
             <button
               key={link.label}
               onClick={() => handleNavClick(link.href)}
-              className="text-xs text-white/40 hover:text-accent transition-colors duration-200"
+              className="text-xs transition-colors duration-200 hover:text-accent"
+              style={{ color: 'var(--text-muted)' }}
             >
               {link.label}
             </button>
@@ -56,23 +71,24 @@ export default function Footer() {
         {/* Right: socials */}
         <div className="flex items-center gap-4">
           <a href="https://github.com/praneethb7" target="_blank" rel="noopener noreferrer"
-            className="text-white/40 hover:text-accent transition-colors duration-200" aria-label="GitHub">
+            className="transition-colors duration-200 hover:text-accent" style={{ color: 'var(--text-muted)' }} aria-label="GitHub">
             <GithubIcon className="w-4 h-4" />
           </a>
           <a href="https://www.linkedin.com/in/praneeth-budati/" target="_blank" rel="noopener noreferrer"
-            className="text-white/40 hover:text-accent transition-colors duration-200" aria-label="LinkedIn">
+            className="transition-colors duration-200 hover:text-accent" style={{ color: 'var(--text-muted)' }} aria-label="LinkedIn">
             <LinkedinIcon className="w-4 h-4" />
           </a>
           <a href="https://leetcode.com/u/praneethb7/" target="_blank" rel="noopener noreferrer"
-            className="text-white/40 hover:text-accent transition-colors duration-200" aria-label="LeetCode">
+            className="transition-colors duration-200 hover:text-accent" style={{ color: 'var(--text-muted)' }} aria-label="LeetCode">
             <LeetCodeIcon className="w-4 h-4" />
           </a>
         </div>
       </div>
 
-      <p className="text-center text-xs text-white/20 mt-6">
-        © 2025 Praneeth Budati. All rights reserved.
-      </p>
+      <div className="mt-6 text-center text-xs" style={{ color: 'rgba(255,255,255,0.15)' }}>
+        © {new Date().getFullYear()} Praneeth Budati. All rights reserved.
+        <span className="ml-4 opacity-60">Press <kbd className="font-mono text-[10px] px-1 py-0.5 rounded border border-white/10">⌘K</kbd> to search</span>
+      </div>
     </footer>
   )
 }

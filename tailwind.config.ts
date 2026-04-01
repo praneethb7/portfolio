@@ -12,8 +12,16 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        accent: "#4F8EF7",
-        dark: "#080808",
+        // Legacy accent (for Tailwind class compatibility: text-accent, border-accent, bg-accent/*)
+        accent: "#5B7FFF",
+        dark: "#0D0D0F",
+        // New surface scale
+        surface: "#0D0D0F",
+        "surface-2": "#141417",
+        "surface-3": "#1C1C21",
+        // Semantic
+        "accent-warm": "#FF6B2B",
+        "accent-gold": "#C9A84C",
         border: "var(--border)",
         input: "var(--input)",
         ring: "var(--ring)",

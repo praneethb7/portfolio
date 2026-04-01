@@ -2,17 +2,18 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Flashlight } from 'lucide-react'
 import { NAV_LINKS } from '@/lib/data'
-import ThemeToggle from './ThemeToggle'
+import { useTorch } from './TorchMode'
+import ScrambleText from './ScrambleText'
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState('home')
   const [hidden, setHidden] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const lastScrollY = useRef(0)
+  const { torchActive, toggleTorch } = useTorch()
 
-  // Scroll direction detection
   useEffect(() => {
     const handleScroll = () => {
       const currentY = window.scrollY
@@ -27,15 +28,12 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Active section via IntersectionObserver
   useEffect(() => {
     const sections = document.querySelectorAll('section[id]')
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id)
-          }
+          if (entry.isIntersecting) setActiveSection(entry.target.id)
         })
       },
       { rootMargin: '-40% 0px -55% 0px' }
@@ -46,8 +44,7 @@ export default function Navbar() {
 
   const handleNavClick = (href: string) => {
     setMobileOpen(false)
-    const el = document.querySelector(href)
-    el?.scrollIntoView({ behavior: 'smooth' })
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -61,17 +58,27 @@ export default function Navbar() {
         style={{
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
-          backgroundColor: 'rgba(8, 8, 8, 0.8)',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          backgroundColor: 'rgba(13,13,15,0.88)',
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
         }}
       >
         {/* Logo */}
         <button
           onClick={() => handleNavClick('#home')}
-          className="font-mono text-xl font-bold tracking-tight text-white hover:text-accent transition-colors duration-200 focus:outline-none"
-          style={{ fontFamily: 'ui-monospace, monospace' }}
+          className="focus:outline-none select-none"
+          style={{ letterSpacing: '-0.02em' }}
         >
-          <span className="text-accent">P</span>B
+          <span
+            className="font-heading text-[18px]"
+            style={{ fontWeight: 700, color: 'var(--text-primary)' }}
+          >
+            Praneeth
+          </span>
+          <ScrambleText
+            text=" Budati"
+            className="font-heading text-[18px]"
+            style={{ fontWeight: 400, color: 'var(--text-secondary)' }}
+          />
         </button>
 
         {/* Desktop Nav */}
@@ -83,26 +90,50 @@ export default function Navbar() {
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href)}
-                className="relative text-sm font-medium transition-colors duration-200 focus:outline-none"
-                style={{ color: isActive ? '#4F8EF7' : 'rgba(255,255,255,0.65)' }}
+                className="relative focus:outline-none"
+                style={{
+                  color: isActive ? 'var(--accent)' : 'var(--text-secondary)',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  transition: 'color 0.2s',
+                }}
               >
-                {link.label}
+                {/* Active dot above */}
                 {isActive && (
-                  <motion.div
-                    layoutId="nav-underline"
-                    className="absolute -bottom-1 left-0 right-0 h-px bg-accent"
+                  <motion.span
+                    layoutId="nav-dot"
+                    className="absolute -top-3 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full"
+                    style={{ backgroundColor: 'var(--accent)', boxShadow: '0 0 6px var(--accent)' }}
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
+                <ScrambleText text={link.label} />
               </button>
             )
           })}
         </nav>
 
-        {/* Right side */}
+        {/* Right: torch + hamburger */}
         <div className="flex items-center gap-3">
-          <ThemeToggle />
-          {/* Mobile hamburger */}
+          <button
+            onClick={toggleTorch}
+            className="w-9 h-9 flex items-center justify-center rounded-lg border border-white/10 bg-white/5 transition-all duration-200 hover:border-accent/50 focus:outline-none"
+            style={
+              torchActive
+                ? { borderColor: 'rgba(91,127,255,0.6)', boxShadow: '0 0 12px rgba(91,127,255,0.3)' }
+                : {}
+            }
+            aria-label="Toggle torch mode"
+            title="Torch mode"
+          >
+            <Flashlight
+              className="w-4 h-4 transition-colors"
+              style={{ color: torchActive ? 'var(--accent)' : 'rgba(255,255,255,0.5)' }}
+            />
+          </button>
+
           <button
             className="md:hidden w-9 h-9 flex items-center justify-center rounded-lg border border-white/10 bg-white/5"
             onClick={() => setMobileOpen((v) => !v)}
@@ -125,8 +156,8 @@ export default function Navbar() {
             style={{
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              backgroundColor: 'rgba(8, 8, 8, 0.95)',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              backgroundColor: 'rgba(13,13,15,0.97)',
+              borderBottom: '1px solid rgba(255,255,255,0.05)',
             }}
           >
             {NAV_LINKS.map((link, i) => (
@@ -136,9 +167,13 @@ export default function Navbar() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => handleNavClick(link.href)}
-                className="text-left py-3 px-4 rounded-lg text-base font-medium transition-colors hover:bg-white/5"
+                className="text-left py-3 px-4 rounded-lg text-base font-medium transition-all hover:bg-white/5"
                 style={{
-                  color: activeSection === link.href.replace('#', '') ? '#4F8EF7' : 'rgba(255,255,255,0.8)',
+                  color:
+                    activeSection === link.href.replace('#', '')
+                      ? 'var(--accent)'
+                      : 'rgba(255,255,255,0.8)',
+                  letterSpacing: '0.06em',
                 }}
               >
                 {link.label}

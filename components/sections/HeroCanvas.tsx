@@ -10,7 +10,7 @@ function ParticleField() {
   const ref = useRef<THREE.Points>(null)
 
   const positions = useMemo(() => {
-    const count = 2000
+    const count = 1200
     const arr = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       const r = 2.5 + Math.random() * 1.5
@@ -23,7 +23,7 @@ function ParticleField() {
     return arr
   }, [])
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (ref.current) {
       ref.current.rotation.y += delta * 0.04
       ref.current.rotation.x += delta * 0.015
@@ -34,7 +34,7 @@ function ParticleField() {
     <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
       <PointMaterial
         transparent
-        color="#4F8EF7"
+        color="#5B7FFF"
         size={0.018}
         sizeAttenuation
         depthWrite={false}
@@ -57,7 +57,7 @@ function FloatingRing() {
   return (
     <mesh ref={ref}>
       <torusGeometry args={[1.8, 0.008, 16, 120]} />
-      <meshBasicMaterial color="#4F8EF7" transparent opacity={0.25} />
+      <meshBasicMaterial color="#5B7FFF" transparent opacity={0.25} />
     </mesh>
   )
 }
@@ -85,7 +85,8 @@ export default function HeroCanvas() {
     <Canvas
       camera={{ position: [0, 0, 5], fov: 60 }}
       style={{ position: 'absolute', inset: 0, zIndex: 0 }}
-      dpr={[1, 1.5]}
+      dpr={[1, 1.2]}
+      frameloop="always"
     >
       <Suspense fallback={null}>
         <ParticleField />

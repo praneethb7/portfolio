@@ -11,39 +11,27 @@ export const ROLES = [
   "Full Stack Developer",
   "Competitive Programmer",
   "Knight on LeetCode, Sophomore IRL",
-  "Building cool stuff in Bengaluru ☕",
+  "Building cool stuff in Bengaluru",
 ]
 
 export const SOCIAL_LINKS = [
-  {
-    label: "GitHub",
-    href: "https://github.com/praneethb7",
-    icon: "github",
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/praneeth-budati/",
-    icon: "linkedin",
-  },
-  {
-    label: "LeetCode",
-    href: "https://leetcode.com/u/praneethb7/",
-    icon: "code",
-  },
+  { label: "GitHub",   href: "https://github.com/praneethb7",                  icon: "github"   },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/praneeth-budati/",    icon: "linkedin" },
+  { label: "LeetCode", href: "https://leetcode.com/u/praneethb7/",              icon: "code"     },
 ]
 
 export const ABOUT_BIO = [
-  "I'm a sophomore at Scaler School of Technology — a 4-year residential CS program in Bengaluru delivered by engineers from Google, Meta, Uber, and more, with a BSc in CS from BITS Pilani.",
-  "I build full-stack products that solve real problems — from geolocation-powered worker discovery platforms to AI calendar agents. Outside of shipping, I'm a Teaching Assistant, a club president, and a Knight-ranked competitive programmer in the top 4% on LeetCode.",
-  "I led Super Mentor sessions with CTOs and startup founders, including the former CTO of Blinkit. I'm always learning, always building.",
+  "I'm a developer who builds things that work — fast, clean, and purposeful. My work spans full-stack web apps, mobile experiences, and AI-integrated platforms, each one built to solve a real problem rather than demonstrate a concept.",
+  "I've shipped products used by hundreds of people, mentored students learning to code for the first time, and sat in rooms with CTOs and founders asking the hard questions. I write competitive code that ranks in the global top 4% on LeetCode, and I bring that same precision to everything I build.",
+  "Currently based in Bengaluru, sharpening every edge.",
 ]
 
 export const CURRENTLY = [
-  { icon: "🎓", text: "Sophomore @ SST (Batch of 2028)" },
-  { icon: "🏆", text: "Bronze Medalist — Ranked 3rd in CGPA" },
-  { icon: "⚔️", text: "Knight on LeetCode | Max Rating: 1905 | Top 4%" },
-  { icon: "🌍", text: "Top 1500 Nationwide — Google's The Big Code 2026" },
-  { icon: "📍", text: "Bengaluru, India" },
+  { text: "Sophomore at Scaler School of Technology, Batch 2028" },
+  { text: "Bronze Medalist — 3rd in Cohort CGPA" },
+  { text: "LeetCode Knight, Max Rating 1905, Top 4% Globally" },
+  { text: "Top 1500 Nationally — Google The Big Code 2026" },
+  { text: "Bengaluru, India" },
 ]
 
 export const TECH_MARQUEE = [
@@ -66,7 +54,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
     date: "Jul 2025 – Present",
     points: [
       "Peer mentor to first-year students; weekly 1:1 sessions and group labs",
-      "Facilitated continuous academic support and tracking",
+      "Facilitated continuous academic support and progress tracking",
     ],
   },
   {
@@ -79,15 +67,6 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Led community outreach as SST Ambassador for 300+ aspirants",
     ],
   },
-  {
-    role: "Host, Super Mentor Sessions",
-    org: "SST Campus",
-    date: "May 2025 – Nov 2025",
-    points: [
-      "Led sessions with CTOs, founders, and leaders (incl. ex-CTO of Blinkit)",
-      "Strengthened students' exposure to real-world engineering and startups",
-    ],
-  },
 ]
 
 export interface Project {
@@ -98,6 +77,7 @@ export interface Project {
   live?: string
   gradient: string
   featured: boolean
+  badge?: string
 }
 
 export const PROJECTS: Project[] = [
@@ -109,6 +89,7 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/praneethb7",
     gradient: "from-blue-900 via-blue-800 to-indigo-900",
     featured: true,
+    badge: "Featured",
   },
   {
     name: "Google Calendar Agent",
@@ -118,6 +99,17 @@ export const PROJECTS: Project[] = [
     github: "https://github.com/praneethb7",
     gradient: "from-violet-900 via-purple-800 to-purple-900",
     featured: true,
+    badge: "Built with Claude",
+  },
+  {
+    name: "Little Kars",
+    description:
+      "Flutter mobile app that auto-detects driving and parking events using Bluetooth state + GPS signals. No manual input needed.",
+    stack: ["Flutter", "Firebase", "Twilio", "Geolocator"],
+    github: "https://github.com/praneethb7",
+    gradient: "from-emerald-900 via-green-800 to-green-900",
+    featured: true,
+    badge: "Personal Project",
   },
   {
     name: "AceNSET",
@@ -128,90 +120,129 @@ export const PROJECTS: Project[] = [
     gradient: "from-cyan-900 via-teal-800 to-teal-900",
     featured: false,
   },
-  {
-    name: "Little Kars",
-    description:
-      "Flutter mobile app that auto-detects driving and parking events using Bluetooth state + GPS signals. No manual input needed.",
-    stack: ["Flutter", "Firebase", "Twilio", "Geolocator"],
-    github: "https://github.com/praneethb7",
-    gradient: "from-emerald-900 via-green-800 to-green-900",
-    featured: false,
-  },
 ]
+
+export interface SkillItem {
+  name: string
+  desc: string
+}
 
 export interface SkillCategory {
   label: string
-  skills: string[]
+  skills: SkillItem[]
 }
 
 export const SKILLS: SkillCategory[] = [
   {
     label: "Languages",
-    skills: ["TypeScript", "JavaScript", "Python", "Java", "C++", "Golang", "HTML", "CSS"],
+    skills: [
+      { name: "TypeScript",  desc: "Typed JS superset" },
+      { name: "JavaScript",  desc: "Dynamic web scripting" },
+      { name: "Python",      desc: "AI/ML + scripting" },
+      { name: "Java",        desc: "OOP fundamentals" },
+      { name: "C++",         desc: "DSA & competitive programming" },
+      { name: "Golang",      desc: "Systems + concurrency" },
+      { name: "HTML",        desc: "Web markup" },
+      { name: "CSS",         desc: "Styling & layout" },
+    ],
   },
   {
     label: "Frameworks & Libraries",
     skills: [
-      "React.js", "Next.js", "Node.js", "Express.js", "FastAPI",
-      "React Native", "Flutter", "Tailwind CSS", "NumPy", "Pandas", "scikit-learn",
+      { name: "React.js",    desc: "UI component library" },
+      { name: "Next.js",     desc: "Full-stack React framework" },
+      { name: "Node.js",     desc: "Server-side JavaScript" },
+      { name: "Express.js",  desc: "Minimal Node.js framework" },
+      { name: "FastAPI",     desc: "Python async REST APIs" },
+      { name: "Flutter",     desc: "Cross-platform mobile" },
+      { name: "Tailwind CSS",desc: "Utility-first CSS" },
+      { name: "NumPy",       desc: "Scientific computing" },
+      { name: "Pandas",      desc: "Data manipulation" },
+      { name: "scikit-learn",desc: "Classical ML library" },
     ],
   },
   {
     label: "Databases & Tools",
     skills: [
-      "MongoDB", "MySQL", "SQLite", "Git", "GitHub", "Firebase",
-      "Linux", "Vercel", "Netlify", "Jupyter Notebook",
+      { name: "MongoDB",    desc: "Document NoSQL DB" },
+      { name: "MySQL",      desc: "Relational database" },
+      { name: "SQLite",     desc: "Embedded SQL" },
+      { name: "Firebase",   desc: "Google's app platform" },
+      { name: "Git",        desc: "Version control" },
+      { name: "Vercel",     desc: "Frontend deployment" },
+      { name: "Linux",      desc: "Unix-based OS" },
+      { name: "Docker",     desc: "Container platform" },
     ],
   },
   {
     label: "Concepts",
     skills: [
-      "RESTful APIs", "Backend System Design", "Auth & Authorization",
-      "DSA", "OOP", "Classical ML", "Statistical Analysis", "Data Visualization",
+      { name: "RESTful APIs",          desc: "Stateless web APIs" },
+      { name: "System Design",         desc: "Backend architecture" },
+      { name: "Auth & Authorization",  desc: "JWT, OAuth flows" },
+      { name: "DSA",                   desc: "Algorithms & data structures" },
+      { name: "OOP",                   desc: "Object-oriented patterns" },
+      { name: "Classical ML",          desc: "Supervised/unsupervised learning" },
+      { name: "Data Visualization",    desc: "Charts & dashboards" },
     ],
   },
 ]
 
 export interface Achievement {
+  id: string
   label: string
   value: number
   suffix: string
   prefix?: string
   description: string
+  accentColor: string
+  subtext: string
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
   {
+    id: "leetcode",
     label: "LeetCode Rating",
     value: 1905,
     suffix: "",
-    description: "Knight Rank · Top 4% Globally",
+    description: "Knight Rank",
+    accentColor: "#FFA116",
+    subtext: "Top 4% Globally · Knight Badge",
   },
   {
-    label: "Batch CGPA Rank",
+    id: "rank",
+    label: "Cohort CGPA Rank",
     value: 3,
     suffix: "",
     prefix: "#",
-    description: "Bronze Medalist · SST Batch 2028",
+    description: "Bronze Medalist",
+    accentColor: "#FFD700",
+    subtext: "3rd in Cohort CGPA · SST Batch 2028",
   },
   {
+    id: "bigcode",
     label: "Google Big Code",
     value: 1500,
-    suffix: "+",
-    description: "Top 1500 Nationally · 2026",
+    suffix: "",
+    description: "Top Nationally",
+    accentColor: "#4285F4",
+    subtext: "Google's The Big Code · 2026",
   },
   {
+    id: "mentored",
     label: "Students Mentored",
     value: 300,
     suffix: "+",
-    description: "AceNSET + TA @ SST",
+    description: "Direct Impact",
+    accentColor: "#4F8EF7",
+    subtext: "AceNSET Platform + SST Teaching Assistant",
   },
 ]
 
 export const ACHIEVEMENT_PILLS = [
-  "🥉 Bronze Medalist — SST Batch of 2028",
-  "⚔️ LeetCode Knight — Top 4% Globally",
-  "🌐 Top 1500 — Google's The Big Code 2026",
-  "🎙️ Club President — Leadership Development Club",
-  "🧑‍🏫 Teaching Assistant @ SST",
+  "LeetCode Knight",
+  "Bronze Medalist",
+  "Google Big Code — Top 1500",
+  "Club President",
+  "Teaching Assistant @ SST",
 ]

@@ -1,13 +1,15 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { motion } from 'framer-motion'
-import { ExternalLink, Star } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import { ExternalLink, Star, Zap } from 'lucide-react'
 import { GithubIcon } from '@/components/common/Icons'
 import { PROJECTS, type Project } from '@/lib/data'
+import ScanLine from '@/components/common/ScanLine'
 
-function ProjectCard({ project, featured }: { project: Project; featured: boolean }) {
+function ProjectCard({ project, index }: { project: Project; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const borderRef = useRef<HTMLDivElement>(null)
   const [tilt, setTilt] = useState({ x: 0, y: 0 })
   const [hovered, setHovered] = useState(false)
 
@@ -18,100 +20,160 @@ function ProjectCard({ project, featured }: { project: Project; featured: boolea
     const cy = rect.top + rect.height / 2
     const dx = (e.clientX - cx) / (rect.width / 2)
     const dy = (e.clientY - cy) / (rect.height / 2)
-    setTilt({ x: dy * -8, y: dx * 8 })
+    setTilt({ x: dy * -7, y: dx * 7 })
   }
 
   const handleMouseLeave = () => {
     setTilt({ x: 0, y: 0 })
     setHovered(false)
+    if (borderRef.current) borderRef.current.style.animation = 'none'
   }
+
+  const handleMouseEnter = () => {
+    setHovered(true)
+    if (borderRef.current) {
+      borderRef.current.style.animation = 'border-travel 2s ease infinite'
+    }
+  }
+
+  const isFeatured = project.featured
 
   return (
     <motion.div
-      ref={cardRef}
-      className={`relative rounded-xl overflow-hidden cursor-pointer ${featured ? 'md:col-span-2' : ''}`}
-      style={{
-        transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ${hovered ? 'translateY(-4px)' : ''}`,
-        transition: 'transform 0.1s ease-out, box-shadow 0.2s ease',
-        boxShadow: hovered
-          ? '0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(79,142,247,0.1)'
-          : '0 4px 20px rgba(0,0,0,0.3)',
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onMouseEnter={() => setHovered(true)}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      className={`relative group ${isFeatured ? 'md:col-span-2' : ''}`}
+      initial={{ opacity: 0, scale: 0.85 }}
+      whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.55, delay: index * 0.08, ease: 'easeOut' }}
     >
-      {/* Gradient background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-60`} />
-      <div className="absolute inset-0 bg-black/40" />
-      {/* Grid pattern */}
+      {/* Traveling border wrapper */}
       <div
-        className="absolute inset-0 opacity-10"
+        ref={borderRef}
         style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
+          background: hovered
+            ? 'linear-gradient(90deg, var(--accent), var(--accent-warm), var(--accent), var(--accent-warm))'
+            : 'transparent',
+          backgroundSize: '300% 300%',
+          padding: hovered ? '1px' : '0',
+          borderRadius: '16px',
+          transition: 'padding 0.2s',
         }}
-      />
+      >
+        <div
+          ref={cardRef}
+          className="relative rounded-[15px] overflow-hidden cursor-pointer h-full"
+          style={{
+            transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg) ${hovered ? 'translateY(-4px)' : ''}`,
+            transition: 'transform 0.1s ease-out',
+            border: hovered ? 'none' : '1px solid rgba(255,255,255,0.07)',
+            background: '#0f0f12',
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          onMouseEnter={handleMouseEnter}
+        >
+          {/* Rotating conic border on non-traveling-border hover */}
+          <div
+            className="absolute inset-[-1px] rounded-[15px] z-0 pointer-events-none"
+            style={{
+              background: hovered
+                ? 'conic-gradient(from var(--border-angle, 0deg), transparent 20%, var(--accent) 40%, #7c3aed 50%, var(--accent) 60%, transparent 80%)'
+                : 'transparent',
+              animation: hovered ? 'rotateBorder 2.5s linear infinite' : 'none',
+              opacity: hovered ? 0.6 : 0,
+            }}
+          />
 
-      <div className={`relative z-10 p-6 ${featured ? 'md:p-8' : ''}`}>
-        {/* Featured badge */}
-        {project.featured && (
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-accent/20 border border-accent/30 text-accent mb-4">
-            <Star className="w-3 h-3 fill-current" />
-            Featured
+          {/* Inner card */}
+          <div className="relative z-10 rounded-[14px] overflow-hidden h-full" style={{ background: '#0f0f12', margin: hovered ? '1px' : '0' }}>
+            <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50`} />
+            <div className="absolute inset-0 bg-black/45" />
+            <div
+              className="absolute inset-0 opacity-[0.08]"
+              style={{
+                backgroundImage: 'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
+                backgroundSize: '40px 40px',
+              }}
+            />
+
+            <div className={`relative z-10 p-6 ${isFeatured ? 'md:p-8' : ''} h-full flex flex-col`}>
+              <div className="flex items-center justify-between mb-4">
+                {project.badge ? (
+                  <div
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-mono font-semibold border"
+                    style={{
+                      background: 'rgba(91,127,255,0.12)',
+                      borderColor: 'rgba(91,127,255,0.35)',
+                      color: 'var(--accent)',
+                    }}
+                  >
+                    <Star className="w-3 h-3 fill-current" />
+                    {project.badge}
+                  </div>
+                ) : (
+                  <div />
+                )}
+                {isFeatured && <Zap className="w-4 h-4 opacity-40" style={{ color: 'var(--accent)' }} />}
+              </div>
+
+              <h3 className={`font-heading font-black mb-3 transition-colors duration-300 ${isFeatured ? 'text-2xl md:text-3xl' : 'text-xl'}`}
+                style={{ color: hovered ? 'var(--accent)' : 'var(--text-primary)' }}>
+                {project.name}
+              </h3>
+
+              <p className={`leading-relaxed mb-5 flex-1 ${isFeatured ? 'text-base max-w-2xl' : 'text-sm'}`}
+                style={{ color: 'rgba(255,255,255,0.6)' }}>
+                {project.description}
+              </p>
+
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2.5 py-1 rounded-md text-xs font-medium border"
+                    style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      borderColor: 'rgba(255,255,255,0.1)',
+                      color: 'rgba(255,255,255,0.65)',
+                    }}
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                  style={{
+                    background: 'rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: 'rgba(255,255,255,0.75)',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <GithubIcon className="w-3.5 h-3.5" />
+                  GitHub
+                </a>
+                {project.live && (
+                  <a
+                    href={project.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200"
+                    style={{ background: 'var(--accent)', color: 'var(--surface)' }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    Live
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
-        )}
-
-        {/* Title */}
-        <h3 className={`font-heading font-black text-white mb-3 ${featured ? 'text-2xl md:text-3xl' : 'text-xl'}`}>
-          {project.name}
-        </h3>
-
-        {/* Description */}
-        <p className={`text-white/65 leading-relaxed mb-5 ${featured ? 'text-base max-w-2xl' : 'text-sm'}`}>
-          {project.description}
-        </p>
-
-        {/* Tech tags */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {project.stack.map((tech) => (
-            <span
-              key={tech}
-              className="px-2.5 py-1 rounded-md text-xs font-medium bg-white/10 border border-white/10 text-white/70"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        {/* Links */}
-        <div className="flex items-center gap-3">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium bg-white/10 border border-white/10 text-white/80 hover:bg-white/20 hover:text-white transition-all duration-200"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <GithubIcon className="w-3.5 h-3.5" />
-            GitHub
-          </a>
-          {project.live && (
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium bg-accent text-dark hover:bg-blue-400 transition-all duration-200"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-              Live
-            </a>
-          )}
         </div>
       </div>
     </motion.div>
@@ -119,42 +181,57 @@ function ProjectCard({ project, featured }: { project: Project; featured: boolea
 }
 
 export default function Projects() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] })
+  const scale = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0.94, 1, 1, 1.06])
+  const opacity = useTransform(scrollYProgress, [0, 0.12, 0.88, 1], [0, 1, 1, 0])
+
   return (
-    <section id="projects" className="py-24 px-6 md:px-12 lg:px-24">
-      <motion.p
-        className="text-sm uppercase tracking-[0.3em] text-accent/60 font-mono mb-4"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-      >
-        03 / Projects
-      </motion.p>
+    <section ref={sectionRef} id="projects" className="py-28 px-6 md:px-12 lg:px-24 relative overflow-hidden">
+      <ScanLine />
 
-      <motion.h2
-        className="font-heading font-black text-4xl md:text-5xl lg:text-6xl text-white mb-4"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-      >
-        Things I&apos;ve Built
-      </motion.h2>
+      {/* Section number watermark */}
+      <div aria-hidden className="section-number-bg">03</div>
 
-      <motion.p
-        className="text-white/40 mb-16 text-base max-w-xl"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.2 }}
-      >
-        From AI-powered platforms to mobile apps — projects that ship.
-      </motion.p>
+      <motion.div style={{ scale, opacity }}>
+        <motion.p
+          className="text-sm uppercase tracking-[0.3em] font-mono mb-4 relative z-10"
+          style={{ color: 'var(--accent)', opacity: 0.6 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 0.6 }}
+          viewport={{ once: true }}
+        >
+          03 / Projects
+        </motion.p>
 
-      <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-5">
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.name} project={project} featured={project.featured} />
-        ))}
-      </div>
+        <motion.h2
+          className="font-heading font-black text-4xl md:text-5xl lg:text-6xl mb-4 relative z-10"
+          style={{ color: 'var(--text-primary)' }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          Things I&apos;ve Built
+        </motion.h2>
+
+        <motion.p
+          className="mb-16 text-base max-w-xl relative z-10"
+          style={{ color: 'var(--text-muted)' }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
+        >
+          From AI-powered platforms to mobile apps — projects that ship.
+        </motion.p>
+
+        <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-5 relative z-10">
+          {PROJECTS.map((project, i) => (
+            <ProjectCard key={project.name} project={project} index={i} />
+          ))}
+        </div>
+      </motion.div>
     </section>
   )
 }
